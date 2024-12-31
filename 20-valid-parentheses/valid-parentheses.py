@@ -7,7 +7,7 @@ class Solution:
             if ch in matching:
                 stack.append(ch)
             else:
-                if not stack:
+                if stack == []:
                     return False
                 
                 last_paretheses = stack.pop()
