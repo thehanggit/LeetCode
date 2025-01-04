@@ -6,7 +6,6 @@ class Solution:
             while s[right] in substring:
                 substring.remove(s[left])
                 left += 1
-
-            substring.add(s[right])
             maxLen = max(maxLen, right - left + 1)
+            substring.add(s[right])
         return maxLen
