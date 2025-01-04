@@ -19,10 +19,9 @@ class Solution:
 
         dirs = [[0, 1], [0, -1], [-1, 0], [1, 0]]
 
-        while queue:
-            size = len(queue)
-            while size > 0:
-                size -= 1
+        while queue and freshcount > 0:
+            time += 1
+            for _ in range(len(queue)):
                 i, j = queue.popleft()
                 for dir in dirs:
                     new_x = i + dir[0]
@@ -31,8 +30,7 @@ class Solution:
                         queue.append((new_x, new_y))
                         grid[new_x][new_y] = 2
                         freshcount -= 1
-            time += 1
         if freshcount == 0:
-            return time - 1
+            return time
         else:
             return -1
