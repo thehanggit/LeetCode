@@ -1,11 +1,11 @@
 class Solution:
     def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
-        hashmap = defaultdict(int)
+        path = [0] * 1000
         for trip in trips:
             num, start, end = trip
             for i in range(start, end):
-                hashmap[i] += num
-                if hashmap[i] > capacity:
+                path[i] += num
+                if path[i] > capacity:
                     return False
         
         return True
