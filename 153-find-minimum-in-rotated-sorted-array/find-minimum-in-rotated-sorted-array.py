@@ -8,7 +8,7 @@ class Solution:
             return nums[left]
         
         while left <= right:
-            mid = left + (right - left) // 2
+            mid = (right + left) // 2
             if nums[mid] > nums [mid + 1]:
                 return nums[mid + 1]
             if nums[mid - 1]> nums[mid]:
