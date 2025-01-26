@@ -15,4 +15,4 @@ select
 from
     finance
 where
-    visited_on >= 1st_date+6
+    visited_on >= date_add(1st_date, interval 6 day)
