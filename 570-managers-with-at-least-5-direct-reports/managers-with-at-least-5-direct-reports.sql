@@ -16,23 +16,15 @@
 -- where
 --     e1.id = e2.managerId
 
-with reports_manager as (
-    select
-        managerId,
-        count(*) as reports
-    from
-        Employee
-    group by
-        managerId
-)
-
 select
     E.name
 from
-    reports_manager R
-inner join
     Employee E
+join
+    Employee M
 on
-    R.managerId = E.id
-where
-    R.reports >= 5
+    E.id = M.managerId
+group by
+    E.id, E.name
+having
+    count(M.managerId) >= 5
