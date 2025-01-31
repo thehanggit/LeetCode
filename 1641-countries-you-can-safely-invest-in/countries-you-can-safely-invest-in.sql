@@ -20,6 +20,6 @@ left join
 on
     P.id in (CS.caller_id, CS.callee_id)
 group by
-    C.country_code
+    C.name
 having
     avg(duration) > (select avg(duration) from Calls)
