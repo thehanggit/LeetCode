@@ -4,7 +4,7 @@ select
 from
     Cinema
 where
-    description != 'boring'
-    and mod(id, 2) = 1
+    mod(id, 2) = 1
+    and description != "boring"
 order by
     rating desc
