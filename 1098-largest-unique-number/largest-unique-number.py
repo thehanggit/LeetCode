@@ -1,12 +1,10 @@
 class Solution:
     def largestUniqueNumber(self, nums: List[int]) -> int:
-        hashmap = defaultdict(int)
-        for num in nums:
-            hashmap[num] += 1
+        # Use Counter to count frequencies of numbers
+        frequency_map = Counter(nums)
 
-        uni_max = float("-inf")
-        for num, fre in hashmap.items():
-            if fre == 1:
-                uni_max = max(num, uni_max)
-
-        return (uni_max if uni_max != float("-inf") else -1)
+        # Find the largest number with frequency 1, or -1 if none found
+        return max(
+            (num for num, freq in frequency_map.items() if freq == 1),
+            default=-1,
+        )
