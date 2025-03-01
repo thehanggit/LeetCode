@@ -17,7 +17,5 @@ class Solution:
                 answer_0.append(player)
             elif hashmap[player] == 1:
                 answer_1.append(player)
-        answer_0.sort()
-        answer_1.sort()
         
-        return [answer_0, answer_1]
+        return [sorted(answer_0), sorted(answer_1)]
