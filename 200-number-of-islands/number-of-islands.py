@@ -43,28 +43,72 @@ class Solution:
                     
         # return nums_island
 
+        # rows = len(grid)
+        # cols = len(grid[0])
+        # dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        # num_of_islands = 0
+
+        # def dfs(x, y):
+        #     for dir in dirs:
+        #         if 0 <= x + dir[0] <= rows - 1 and 0 <= y + dir[1] <= cols - 1:
+        #             new_x = x + dir[0]
+        #             new_y = y + dir[1]
+        #             if grid[new_x][new_y] == "1":
+        #                 grid[new_x][new_y] = "0"
+        #                 dfs(new_x, new_y)
+        
+        # for i in range(rows):
+        #     for j in range(cols):
+        #         if grid[i][j] == "1":
+        #             num_of_islands += 1
+        #             dfs(i, j)
+
+        # return num_of_islands
+
+        count = 0
         rows = len(grid)
         cols = len(grid[0])
-        dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        num_of_islands = 0
+        parent = []
+        rank = []
+        dirs = [[0, 1], [0, -1], [-1, 0], [1, 0]]
 
-        def dfs(x, y):
-            for dir in dirs:
-                if 0 <= x + dir[0] <= rows - 1 and 0 <= y + dir[1] <= cols - 1:
-                    new_x = x + dir[0]
-                    new_y = y + dir[1]
-                    if grid[new_x][new_y] == "1":
-                        grid[new_x][new_y] = "0"
-                        dfs(new_x, new_y)
-        
         for i in range(rows):
             for j in range(cols):
                 if grid[i][j] == "1":
-                    num_of_islands += 1
-                    dfs(i, j)
+                    parent.append(i*cols+ j)
+                    count += 1
+                else:
+                    parent.append(0)
+                rank.append(0)
+        
+        def find(x):
+            if parent[x] != x:
+                parent[x] = find(parent[x])
+            return parent[x]
 
-        return num_of_islands
-                        
+        def union(x, y):
+            nonlocal count
+            rootx, rooty = find(x), find(y)
+            if rootx != rooty:
+                if rank[x] > rank[y]:
+                    parent[rooty] = rootx
+                elif rank[x] < rank[y]:
+                    parent[rootx] = rooty
+                else:
+                    parent[rooty] = rootx
+                    rank[rootx] += 1
+                count -= 1
+
+        for row in range(rows):
+            for col in range(cols):
+                if grid[row][col] == "1":
+                    for dx, dy in dirs:
+                        new_row = row + dx
+                        new_col = col + dy
+                        if 0 <= new_row < rows and 0 <= new_col < cols and grid[new_row][new_col] == "1":
+                            union(row * cols + col, new_row * cols + new_col)
+        return count
+
 
 
 
