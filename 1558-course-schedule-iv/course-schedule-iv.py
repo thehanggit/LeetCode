@@ -1,23 +1,20 @@
 class Solution:
     def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
         adj = [[] for _ in range(numCourses)]
-
         for pre in prerequisites:
             adj[pre[1]].append(pre[0])
-
-        memo = {}
-
-        def dfs(u, v):
-            if (u, v) in memo:
-                return memo[(u, v)]
+        
+        def dfs(u, v, visited):
             if u in adj[v]:
-                memo[(u, v)] = True
                 return True
             for neighbor in adj[v]:
-                if dfs(u, neighbor):
-                    memo[(u, v)] = True
-                    return True
-            memo[(u, v)] =  False
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    if dfs(u, neighbor, visited):
+                        return True
             return False
         
-        return [dfs(u, v) for u, v in queries]
+        ans = []
+        for u, v in queries:
+            ans.append(dfs(u, v, set()))
+        return ans
