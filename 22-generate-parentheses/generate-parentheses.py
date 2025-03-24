@@ -21,6 +21,7 @@ class Solution:
         def backtrack(subset, left_count, right_count):
             if len(subset) // 2 == n:
                 res.append("".join(subset.copy()))
+                return
             
             if left_count < n:
                 subset.append("(")
