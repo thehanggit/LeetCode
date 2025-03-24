@@ -29,10 +29,10 @@ class Solution:
 
         pacific_reach = bfs(pacific)
         atlantic_reach = bfs(atlantic)
-        ans = []
-        for x, y in pacific_reach:
-            if (x, y) in atlantic_reach:
-                ans.append([x, y])
+        # ans = []
+        # for x, y in pacific_reach:
+        #     if (x, y) in atlantic_reach:
+        #         ans.append([x, y])
         
-        return ans
-
+        # return ans
+        return list(pacific_reach.intersection(atlantic_reach))
