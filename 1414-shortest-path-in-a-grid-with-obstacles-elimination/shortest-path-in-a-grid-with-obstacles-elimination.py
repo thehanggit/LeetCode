@@ -24,55 +24,30 @@ class Solution:
 
         # return -1
 
+
+
         rows = len(grid)
         cols = len(grid[0])
-        dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+        dirs = [[1, 0],[-1, 0],[0, 1],[0, -1]]
+        queue = deque()
         state = (0, 0, k)
-        queue = deque([(0, state)])
-        seen = set([state])
+        queue.append((0, state))
+        visited = set([state])
 
         while queue:
             distance, (row, col, k) = queue.popleft()
-            if (row, col) == (rows - 1, cols - 1):
+            if (row, col) == (rows-1, cols-1):
                 return distance
             
-            for dir in dirs:
-                if 0 <= row + dir[0] <= rows - 1 and 0 <= col + dir[1] <= cols - 1:
-                    new_row = row + dir[0]
-                    new_col = col + dir[1]
+            for dx, dy in dirs:
+                new_row = row + dx
+                new_col = col + dy
+                if 0 <= new_row < rows and 0 <= new_col < cols:
                     threshold = k - grid[new_row][new_col]
                     if threshold >= 0:
-
                         new_state = (new_row, new_col, threshold)
-                        if new_state not in seen:
-                            seen.add(new_state)
+                        if new_state not in visited:
+                            visited.add(new_state)
                             queue.append((distance + 1, new_state))
         
-        return -1 
-
-
-        # rows = len(grid)
-        # cols = len(grid[0])
-        # dirs = [[1, 0],[-1, 0],[0, 1],[0, -1]]
-        # queue = deque()
-        # state = (0, 0, k)
-        # queue.append((0, state))
-        # visited = set([state])
-
-        # while queue:
-        #     distance, (row, col, k) = queue.popleft()
-        #     if (row, col) == (rows-1, cols-1):
-        #         return distance
-            
-        #     for dx, dy in dirs:
-        #         new_row = row + dx
-        #         new_col = col + dy
-        #         if 0 <= new_row < rows and 0 <= new_col < cols:
-        #             threshold = k - grid[new_row][new_col]
-        #             if threshold >= 0:
-        #                 new_state = (new_row, new_col, threshold)
-        #                 if (new_row, new_col) not in visited:
-        #                     visited.add(new_state)
-        #                     queue.append((distance + 1, new_state))
-        
-        # return -1
+        return -1
