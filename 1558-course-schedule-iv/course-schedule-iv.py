@@ -21,31 +21,59 @@ class Solution:
         #     ans.append(dfs(u, v, set()))
         # return ans
 
+        # adj = [[] for _ in range(numCourses)]
+        # indegree = [0] * numCourses
+
+        # for pre in prerequisites:
+        #     adj[pre[0]].append(pre[1])
+        #     indegree[pre[1]] += 1
+
+        # nodesprerequisites = defaultdict(set)
+        # q = deque()
+        # for i in range(numCourses):
+        #     if indegree[i] == 0:
+        #         q.append(i)
+
+        # while q:
+        #     course = q.popleft()
+        #     for neighbor in adj[course]:
+        #         nodesprerequisites[neighbor].add(course)
+        #         for prereq in nodesprerequisites[course]:
+        #             nodesprerequisites[neighbor].add(prereq)
+                
+        #         indegree[neighbor] -= 1
+        #         if indegree[neighbor] == 0:
+        #             q.append(neighbor)
+
+        # return [u in nodesprerequisites[v] for u, v in queries]
+
         adj = [[] for _ in range(numCourses)]
-        indegree = [0] * numCourses
+        indegrees = [0] * numCourses
 
         for pre in prerequisites:
             adj[pre[0]].append(pre[1])
-            indegree[pre[1]] += 1
+            indegrees[pre[1]] += 1
 
-        nodesprerequisites = defaultdict(set)
-        q = deque()
+        queue = deque()
         for i in range(numCourses):
-            if indegree[i] == 0:
-                q.append(i)
+            if indegrees[i] == 0:
+                queue.append(i)
 
-        while q:
-            course = q.popleft()
+        nodespre = defaultdict(set)
+        while queue:
+            course = queue.popleft()
             for neighbor in adj[course]:
-                nodesprerequisites[neighbor].add(course)
-                for prereq in nodesprerequisites[course]:
-                    nodesprerequisites[neighbor].add(prereq)
-                
-                indegree[neighbor] -= 1
-                if indegree[neighbor] == 0:
-                    q.append(neighbor)
+                nodespre[neighbor].add(course)
+                for course_pre in nodespre[course]:
+                    nodespre[neighbor].add(course_pre)
+            
+                indegrees[neighbor] -= 1
+                if indegrees[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        ans = []
+        return [True if u in nodespre[v] else False for u, v in queries ]
 
-        return [u in nodesprerequisites[v] for u, v in queries]
 
 
 
