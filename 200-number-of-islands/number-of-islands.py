@@ -111,12 +111,12 @@ class Solution:
         #                     union(row * cols + col, new_row * cols + new_col)
         # return count
 
-        count = 0
         rows = len(grid)
         cols = len(grid[0])
-        dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
         parent = []
         rank = []
+        count = 0
+        dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
         for i in range(rows):
             for j in range(cols):
                 if grid[i][j] == "1":
@@ -127,33 +127,35 @@ class Solution:
                 rank.append(0)
         
         def find(x):
-            if parent[x] != x:
-                parent[x] = find(parent[x])
+            if parent[x] == x:
+                return x
+            parent[x] = find(parent[x])
             return parent[x]
 
         def union(x, y):
             nonlocal count
-            rootX = find(x)
-            rootY = find(y)
-            if rootX != rootY:
+            rootx = find(x)
+            rooty = find(y)
+            if rootx != rooty:
                 if rank[x] > rank[y]:
-                    parent[rootY] = rootX
-                elif rank[x] > rank[y]:
-                    parent[rootX] = rootY
+                    parent[rooty] = rootx
+                elif rank[y] > rank[x]:
+                    parent[rootx] = rooty
                 else:
-                    parent[rootY] = rootX
-                    rank[rootX] += 1
+                    parent[rootx] = rooty
+                    rank[rooty] += 1
                 count -= 1
         
         for row in range(rows):
             for col in range(cols):
                 if grid[row][col] == "1":
                     for dx, dy in dirs:
-                        new_row = row + dx
-                        new_col = col + dy
-                        if 0 <= new_row < rows and 0 <= new_col < cols and grid[new_row][new_col] == "1":
-                            union(cols*row + col, cols*new_row + new_col)
+                        if 0 <= row + dx < rows and 0 <= col + dy < cols and grid[row + dx][col + dy] == "1":
+                            union(cols*row + col, cols*(row + dx) + (col + dy))
+        
         return count
+
+                
 
 
             
