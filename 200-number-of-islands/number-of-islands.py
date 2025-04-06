@@ -137,9 +137,9 @@ class Solution:
             rootx = find(x)
             rooty = find(y)
             if rootx != rooty:
-                if rank[x] > rank[y]:
+                if rank[rootx] > rank[rooty]:
                     parent[rooty] = rootx
-                elif rank[y] > rank[x]:
+                elif rank[rooty] > rank[rootx]:
                     parent[rootx] = rooty
                 else:
                     parent[rootx] = rooty
