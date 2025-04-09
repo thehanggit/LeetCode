@@ -1,20 +1,28 @@
-# Write your MySQL query statement below
-with all_ids as (
-    select requester_id as id
-    from RequestAccepted
+with friendship as (
+    select
+        requester_id as id,
+        count(*) as friend_num
+    from
+        RequestAccepted
+    group by
+        requester_id
     union all
-    select accepter_id as id
-    from RequestAccepted
+    select
+        accepter_id as id,
+        count(*) as friend_num
+    from
+        RequestAccepted
+    group by
+        accepter_id
 )
 
 select
     id,
-    count(id) as num
+    sum(friend_num) as num
 from
-    all_ids
+    friendship
 group by
     id
 order by
     num desc
-limit
-    1
+limit 1
