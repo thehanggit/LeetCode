@@ -1,29 +1,22 @@
-# Write your MySQL query statement below
-with department_name as (
+with ranking as (
     select
-        E.*,
-        D.name as Department
+        departmentId,
+        name,
+        salary,
+        dense_rank() over(partition by departmentId order by salary desc) as ranking
     from
-        Employee E
-    left join
-        Department D
-    on
-        E.departmentId = D.id
-),
-
-with_rank as (
-    select
-        *,
-        dense_rank() over(partition by departmentId order by salary desc) as rnk
-    from
-        department_name
+        Employee
 )
 
 select
-    Department,
-    name as Employee,
+    d.name as Department,
+    r.name as Employee,
     salary as Salary
 from
-    with_rank
+    ranking r
+join
+    Department d
+on
+    r.departmentId = d.id
 where
-    rnk in (1,2,3)
+    ranking <= 3
