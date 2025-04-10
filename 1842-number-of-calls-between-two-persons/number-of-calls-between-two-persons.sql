@@ -1,35 +1,35 @@
-# Write your MySQL query statement below
--- with distinct_pair as (
---     select
---         case
---             when from_id < to_id then from_id
---             when from_id > to_id then to_id
---         end as person1,
---         case
---             when from_id < to_id then to_id
---             when from_id > to_id then from_id
---         end as person2,
---         duration
---     from
---         Calls
--- )
-
--- select
---     person1,
---     person2,
---     count(*) as call_count,
---     sum(duration) as total_duration
--- from
---     distinct_pair
--- group by
---     person1, person2
+with cte as (
+    select
+        from_id as person1,
+        to_id as person2,
+        count(*) as call_count,
+        sum(duration) as total_duration
+    from
+        Calls
+    where
+        from_id < to_id
+    group by
+        person1, person2
+    union all
+    select
+        to_id as person1,
+        from_id as person2,
+        count(*) as call_count,
+        sum(duration) as total_duration
+    from
+        Calls
+    where
+        from_id > to_id
+    group by
+        person1, person2
+)
 
 select
-    least(from_id, to_id) as person1,
-    greatest(from_id, to_id) as person2,
-    count(*) as call_count,
-    sum(duration) as total_duration
+    person1,
+    person2,
+    sum(call_count) as call_count,
+    sum(total_duration) as total_duration
 from
-    Calls
+    cte
 group by
     person1, person2
