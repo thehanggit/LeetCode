@@ -1,9 +1,8 @@
-# Write your MySQL query statement below
-with frequency as (
+with ranking as (
     select
         customer_id,
         product_id,
-        rank() over(partition by customer_id order by count(product_id) desc) as rnk
+        rank() over(partition by customer_id order by count(product_id) desc) as ranking
     from
         Orders
     group by
@@ -11,14 +10,14 @@ with frequency as (
 )
 
 select
-    F.customer_id,
-    F.product_id,
-    P.product_name
+    r.customer_id,
+    p.product_id,
+    p.product_name
 from
-    frequency F
-left join
-    Products P
+    ranking r
+join
+    Products p
 on
-    F.product_id = P.product_id
+    r.product_id = p.product_id
 where
-    F.rnk = 1
+    r.ranking = 1
