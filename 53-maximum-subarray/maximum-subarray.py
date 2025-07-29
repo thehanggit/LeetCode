@@ -7,10 +7,15 @@ class Solution:
         #     maxsubarray = max(currentsubarray, maxsubarray)
 
         # return maxsubarray
-        best = current =  float('-inf')
-        # current = 0
-        for num in nums:
-            current =  max(num, current + num)
-            best = max(best, current)
+
+        # best = current =  float('-inf')
+        # for num in nums:
+        #     current =  max(num, current + num)
+        #     best = max(best, current)
         
-        return best
+        # return best
+        res = current = float('-inf')
+        for num in nums:
+            current = max(num, num + current)
+            res = max(res, current)
+        return res
