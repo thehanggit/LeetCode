@@ -1,26 +1,17 @@
-# Write your MySQL query statement below
-with customer_id_buy_c as (
-    select
-        customer_id
-    from
-        Orders
-    group by
-        customer_id
-    having
-        sum(product_name='A') > 0
-        and sum(product_name='B') > 0
-        and sum(product_name='C') = 0
-)
 
 select
-    *
+    c.*
 from
-    Customers
-where
-    customer_id in (
-        select
-            customer_id
-        from
-            customer_id_buy_c
-    )
-
+    Orders o
+inner join
+    Customers c
+on
+    o.customer_id = c.customer_id
+group by
+    o.customer_id
+having
+    sum(product_name='A') >= 1
+    and sum(product_name='B') >= 1
+    and sum(product_name='C') = 0
+order by
+    o.customer_id
