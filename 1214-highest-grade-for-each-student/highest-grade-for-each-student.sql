@@ -1,8 +1,9 @@
-# Write your MySQL query statement below
-with rank_enro as (
+with grade_rank as (
     select
-        *,
-        dense_rank() over(partition by student_id order by grade desc, course_id) as rnk
+        student_id,
+        course_id,
+        grade,
+        rank() over(partition by student_id order by grade desc, course_id asc) as ranking
     from
         Enrollments
 )
@@ -12,8 +13,8 @@ select
     course_id,
     grade
 from
-    rank_enro
+    grade_rank
 where
-    rnk = 1
-group by
+    ranking = 1
+order by
     student_id
