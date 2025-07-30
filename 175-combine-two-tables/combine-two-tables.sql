@@ -1,12 +1,12 @@
-# Write your MySQL query statement below
+
 select
-    P.firstName,
-    P.lastName,
-    A.city,
-    A.state
+    p.firstName,
+    p.lastName,
+    a.city,
+    a.state
 from
-    Person P
+    Person p
 left join
-    Address A
+    Address a
 on
-    P.personId = A.personId
+    p.personId = a.personId
