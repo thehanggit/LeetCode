@@ -1,4 +1,6 @@
-with match_points as (
+
+
+with cte as (
     select
         host_team as team,
         case
@@ -11,9 +13,10 @@ with match_points as (
     union all
     select
         guest_team as team,
+
         case
-            when host_goals < guest_goals then 3
-            when host_goals = guest_goals then 1
+            when guest_goals > host_goals then 3
+            when guest_goals = host_goals then 1
             else 0
         end as points
     from
@@ -23,14 +26,16 @@ with match_points as (
 select
     t.team_id,
     t.team_name,
-    ifnull(sum(points), 0) as num_points
+    ifnull(sum(c.points),0) as num_points
 from
     Teams t
 left join
-    match_points mp
+    cte c
 on
-    mp.team = t.team_id
+    t.team_id = c.team
 group by
-    t.team_id, t.team_name
+    t.team_id,
+    t.team_name
 order by
-    num_points desc, t.team_id asc
+    num_points desc,
+    t.team_id asc
