@@ -1,107 +1,80 @@
--- with june as (
+-- with cte as (
 --     select
---         customer_id
+--         o.customer_id,
+--         o.product_id,
+--         o.quantity,
+--         o.order_date,
+--         p.price
 --     from
 --         Orders o
---     join
+--     left join
 --         Product p
 --     on
 --         o.product_id = p.product_id
+-- ),
+
+-- june as (
+--     select
+--         customer_id
+--     from
+--         cte
 --     where
---         date_format(order_date, '%Y-%m') = '2020-06'
+--         year(order_date) = 2020
+--         and month(order_date) = 6
 --     group by
 --         customer_id
 --     having
---         sum(o.quantity * p.price) >= 100
+--         sum(quantity * price) >= 100
 -- ),
 
 -- july as (
 --     select
 --         customer_id
 --     from
---         Orders o
---     join
---         Product p
---     on
---         o.product_id = p.product_id
+--         cte
 --     where
---         date_format(order_date, '%Y-%m') = '2020-07'
+--         year(order_date) = 2020
+--         and month(order_date) = 7
 --     group by
 --         customer_id
 --     having
---         sum(o.quantity * p.price) >= 100
+--         sum(quantity * price) >= 100   
 -- )
 
 -- select
 --     c.customer_id,
 --     c.name
 -- from
+--     Customers c
+-- inner join
 --     june
--- join
+-- on
+--     c.customer_id = june.customer_id
+-- inner join
 --     july
 -- on
 --     june.customer_id = july.customer_id
--- join
---     Customers c
--- on
---     june.customer_id = c.customer_id
 
 
-
-with cte as (
-    select
-        o.customer_id,
-        o.product_id,
-        o.quantity,
-        o.order_date,
-        p.price
-    from
-        Orders o
-    left join
-        Product p
-    on
-        o.product_id = p.product_id
-),
-
-june as (
-    select
-        customer_id
-    from
-        cte
-    where
-        year(order_date) = 2020
-        and month(order_date) = 6
-    group by
-        customer_id
-    having
-        sum(quantity * price) >= 100
-),
-
-july as (
-    select
-        customer_id
-    from
-        cte
-    where
-        year(order_date) = 2020
-        and month(order_date) = 7
-    group by
-        customer_id
-    having
-        sum(quantity * price) >= 100   
-)
 
 select
-    c.customer_id,
-    c.name
+    customer_id,
+    name
 from
-    Customers c
-inner join
-    june
-on
-    c.customer_id = june.customer_id
-inner join
-    july
-on
-    june.customer_id = july.customer_id
-
+    Customers 
+join
+    Orders using (customer_id)
+join
+    Product using (product_id)
+where
+    year(order_date) = 2020
+group by
+    customer_id
+having
+    sum(
+        if(month(order_date) = 6, quantity, 0) * price
+    ) >= 100
+    and
+    sum(
+        if(month(order_date) = 7, quantity, 0) * price
+    ) >= 100
