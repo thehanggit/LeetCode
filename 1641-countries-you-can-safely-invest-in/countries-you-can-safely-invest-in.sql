@@ -1,25 +1,53 @@
-# Write your MySQL query statement below
-with person_country_code as (
+-- with personal_country_code as (
+--     select
+--         id,
+--         name,
+--         substring(phone_number, 1, 3) as country_code
+--     from
+--         Person
+-- )
+
+-- select
+--     C.name as country
+-- from
+--     Country C
+-- left join
+--     person_country_code as P
+-- on
+--     C.country_code = P.country_code
+-- left join
+--     Calls CS
+-- on
+--     P.id in (CS.caller_id, CS.callee_id)
+-- group by
+--     C.name
+-- having
+--     avg(duration) > (select avg(duration) from Calls)
+
+
+-- first get the country of each person id
+-- calculate global average and country average call for each caller/callee
+with country_person as (
     select
-        *,
-        substring(phone_number, 1, 3) as  country_code
+        p.id,
+        c.name
     from
-        Person
+        Person p
+    join
+        Country c
+    on
+        substring(p.phone_number, 1, 3) = c.country_code
 )
 
 select
-    C.name as country
+    cp.name as country
 from
-    Country C
-left join
-    person_country_code as P
+    country_person cp
+join
+    Calls c
 on
-    C.country_code = P.country_code
-left join
-    Calls CS
-on
-    P.id in (CS.caller_id, CS.callee_id)
+    cp.id = c.caller_id or cp.id = c.callee_id
 group by
-    C.name
+    cp.name
 having
-    avg(duration) > (select avg(duration) from Calls)
+    avg(c.duration) > (select avg(duration) from Calls)
