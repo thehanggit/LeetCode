@@ -43,7 +43,7 @@ select
     cp.name as country
 from
     country_person cp
-join
+left join
     Calls c
 on
     cp.id = c.caller_id or cp.id = c.callee_id
