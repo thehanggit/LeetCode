@@ -14,4 +14,4 @@ from
 group by
     email
 having
-    count(id) > 1 
+    count(*) > 1 
