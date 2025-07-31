@@ -1,4 +1,12 @@
-# Write your MySQL query statement below
+-- select
+--     email as Email
+-- from
+--     Person
+-- group by
+--     email
+-- having
+--     count(email) >= 2
+
 select
     email
 from
@@ -6,4 +14,4 @@ from
 group by
     email
 having
-    count(*) > 1
+    count(id) > 1 
