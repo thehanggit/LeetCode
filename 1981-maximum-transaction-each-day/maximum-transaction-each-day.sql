@@ -1,22 +1,17 @@
-# Write your MySQL query statement below
-with temp as (
+with ranking as (
     select
-        date(day) as day_time,
-        max(amount) as max_tran
+        transaction_id,
+        rank() over(partition by day order by amount desc) as ranking
     from
         Transactions
-    group by
-        day_time
 )
 
-select distinct
-    T.transaction_id
+select
+    transaction_id
 from
-    Transactions T
-join
-    temp t
-on
-    T.max_tran = t.amount
-    and T.day_time = date(t.day)
+    ranking
+where
+    ranking = 1
 order by
-    T.transaction_id
+    transaction_id
+
