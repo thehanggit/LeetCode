@@ -24,61 +24,61 @@
 
 
 
-with ranking_order as (
-    select
-        customer_id,
-        order_id,
-        order_date,
-        rank() over(partition by customer_id order by order_date desc) as recent_rank
-    from
-        Orders
-)
-
-select
-    c.name as customer_name,
-    r.customer_id,
-    r.order_id,
-    r.order_date
-from
-    ranking_order r
-left join
-    Customers c
-on
-    r.customer_id = c.customer_id
-where
-    r.recent_rank <= 3
-order by
-    c.name, r.customer_id, r.order_date desc
-
-
--- with cte as (
+-- with ranking_order as (
 --     select
---         order_id,
 --         customer_id,
+--         order_id,
 --         order_date,
---         rank() over(partition by customer_id order by order_date desc) as rnk
+--         rank() over(partition by customer_id order by order_date desc) as recent_rank
 --     from
 --         Orders
-    
 -- )
 
 -- select
 --     c.name as customer_name,
---     e.customer_id,
---     e.order_id,
---     e.order_date
+--     r.customer_id,
+--     r.order_id,
+--     r.order_date
 -- from
---     cte e
+--     ranking_order r
 -- left join
 --     Customers c
 -- on
---     e.customer_id = c.customer_id
+--     r.customer_id = c.customer_id
 -- where
---     e.rnk <= 3
+--     r.recent_rank <= 3
 -- order by
---     customer_name,
---     e.customer_id,
---     e.order_date desc
+--     c.name, r.customer_id, r.order_date desc
+
+
+with cte as (
+    select
+        order_id,
+        customer_id,
+        order_date,
+        rank() over(partition by customer_id order by order_date desc) as rnk
+    from
+        Orders
+    
+)
+
+select
+    c.name as customer_name,
+    e.customer_id,
+    e.order_id,
+    e.order_date
+from
+    cte e
+left join
+    Customers c
+on
+    e.customer_id = c.customer_id
+where
+    e.rnk <= 3
+order by
+    c.name,
+    e.customer_id,
+    e.order_date desc
 
 
 
