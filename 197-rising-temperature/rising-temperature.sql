@@ -1,36 +1,20 @@
--- # Write your MySQL query statement below
--- with row_Weather as (
---     select
---         *,
---         lag(temperature, 1) over (order by recordDate) as previous_temp,
---         lag(recordDate, 1) over (order by recordDate) as previous_record
---     from
---         Weather
--- )
-
 -- select
---     id
+--     w1.id as Id
 -- from
---     row_Weather
+--     Weather w1,
+--     Weather w2
 -- where
---     temperature > previous_temp
+--     w1.recordDate = w2.recordDate + interval 1 day
 -- and
---     recordDate = date_add(previous_record, interval 1 day)
-
-with previous_date as (
-    select
-        *,
-        lag(temperature, 1) over (order by recordDate) as previous_temp,
-        lag(recordDate, 1) over (order by recordDate) as previous_date
-    from
-        Weather
-)
+--     w1.temperature > w2.temperature
 
 select
-    id
+    w1.id as id
 from
-    previous_date
+    Weather w1
+join
+    Weather w2
+on
+    datediff(w1.recordDate, w2.recordDate) = 1
 where
-    temperature > previous_temp
-    and previous_date = date_sub(recordDate, interval 1 day)
-
+    w1.temperature > w2.temperature
