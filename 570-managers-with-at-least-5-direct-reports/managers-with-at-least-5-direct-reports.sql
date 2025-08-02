@@ -1,3 +1,4 @@
+
 select
     name
 from
@@ -8,10 +9,8 @@ where
             managerId
         from
             Employee
-        where
-            managerId is not null
         group by
             managerId
         having
-            count(distinct id) >= 5
+            count(distinct id) >=5
     )
