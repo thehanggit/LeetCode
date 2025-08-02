@@ -1,23 +1,19 @@
-# Write your MySQL query statement below
 -- select
---     EmployeeUNI.unique_id,
---     Employees.name
+--     e.name,
+--     ei.unique_id
 -- from
---     Employees
+--     Employees e
 -- left join
---     EmployeeUNI
+--     EmployeeUNI ei
 -- on
---     Employees.id = EmployeeUNI.id;
-
-
+--     e.id = ei.id
 
 select
-    U.unique_id,
-    E.name
+    u.unique_id,
+    e.name
 from
-    Employees E
+    Employees e
 left join
-    EmployeeUNI U
+    EmployeeUNI u
 on
-    E.id = U.id
-
+    e.id = u.id
