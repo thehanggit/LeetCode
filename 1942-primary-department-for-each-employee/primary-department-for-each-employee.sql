@@ -1,12 +1,27 @@
-# Write your MySQL query statement below
-select
-    employee_id,
-    department_id
-from
-    Employee
-where
-    primary_flag = 'Y'
-union
+-- select
+--     employee_id,
+--     department_id
+-- from
+--     Employee
+-- where
+--     primary_flag = 'Y'
+-- union
+-- select
+--     employee_id,
+--     department_id
+-- from
+--     Employee
+-- where
+--     employee_id not in (
+--         select
+--             employee_id
+--         from
+--             Employee
+--         where
+--             primary_flag = 'Y'
+--     )
+--     and primary_flag = 'N'
+
 select
     employee_id,
     department_id
@@ -15,5 +30,12 @@ from
 group by
     employee_id
 having
-    count(employee_id) = 1
-    
+    count(*) = 1
+union all
+select
+    employee_id,
+    department_id
+from
+    Employee
+where
+    primary_flag = 'Y'
