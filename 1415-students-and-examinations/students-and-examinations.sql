@@ -1,63 +1,25 @@
-# Write your MySQL query statement below
--- select
---     s.student_id,
---     s.student_name,
---     sub.subject_name,
---     ifnull(grouped.attended_exams, 0) as attended_exams
--- from
---     Students s
--- cross join
---     Subjects sub
--- left join (
---     select
---         student_id,
---         subject_name,
---         count(*) as attended_exams
---     from
---         Examinations
---     group by
---         student_id,
---         subject_name
--- ) grouped
--- on
---     s.student_id = grouped.student_id
---     and sub.subject_name = grouped.subject_name
--- order by s.student_id, sub.subject_name
-
-with cross_table as (
+with cte as (
     select
-        S.*,
-        Sub.*
+        *
     from
-        Students S
+        Students
     cross join
-        Subjects Sub
-),
-
-calculate_exam as (
-    select
-        student_id,
-        subject_name,
-        count(*) as attended_exams
-    from
-        Examinations
-    group by
-        student_id,
-        subject_name
+        Subjects
 )
 
 select
-    C.student_id,
-    C.student_name,
-    C.subject_name,
-    ifnull (E.attended_exams, 0) as attended_exams
+    c.*,
+    case when e.subject_name is not null then count(*) else 0 end as attended_exams
 from
-    cross_table C
+    cte c
 left join
-    calculate_exam E
+    Examinations e
 on
-    C.student_id = E.student_id
-    and C.subject_name = E.subject_name
+    c.student_id = e.student_id
+    and c.subject_name = e.subject_name
+group by
+    c.student_id,
+    c.subject_name
 order by
-    C.student_id, C.subject_name
-
+    c.student_id,
+    c.subject_name
