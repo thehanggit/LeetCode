@@ -1,4 +1,4 @@
-with friendship as (
+with friends as (
     select
         requester_id as id,
         count(*) as friend_num
@@ -20,7 +20,7 @@ select
     id,
     sum(friend_num) as num
 from
-    friendship
+    friends
 group by
     id
 order by
