@@ -3,7 +3,7 @@ with cte as (
     select
         *,
         sum(frequency) over(order by num) as total_freq,
-        (sum(frequency) over())/2 as median_index
+        (sum(frequency) over())/2.0 as median_index
     from
         Numbers
 )
