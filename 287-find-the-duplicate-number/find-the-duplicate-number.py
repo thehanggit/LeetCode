@@ -1,9 +1,16 @@
 class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
-        hashmap = defaultdict(int)
-        for num in nums:
-            if num in hashmap:
-                return num
-            else:
-                hashmap[num] += 1
+        tor = hare = nums[0]
+        while True:
+            tor = nums[tor]
+            hare = nums[nums[hare]]
+            if tor == hare:
+                break
         
+        tor = nums[0]
+        while tor != hare:
+            tor = nums[tor]
+            hare = nums[hare]
+        
+        return tor
+            
