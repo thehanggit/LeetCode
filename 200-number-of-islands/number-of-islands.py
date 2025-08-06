@@ -111,53 +111,72 @@ class Solution:
         #                     union(row * cols + col, new_row * cols + new_col)
         # return count
 
+        # rows = len(grid)
+        # cols = len(grid[0])
+        # parent = []
+        # rank = []
+        # count = 0
+        # dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+        # for i in range(rows):
+        #     for j in range(cols):
+        #         if grid[i][j] == "1":
+        #             parent.append(i*cols + j)
+        #             count += 1
+        #         else:
+        #             parent.append(0)
+        #         rank.append(0)
+        
+        # def find(x):
+        #     if parent[x] == x:
+        #         return x
+        #     parent[x] = find(parent[x])
+        #     return parent[x]
+
+        # def union(x, y):
+        #     nonlocal count
+        #     rootx = find(x)
+        #     rooty = find(y)
+        #     if rootx != rooty:
+        #         if rank[rootx] > rank[rooty]:
+        #             parent[rooty] = rootx
+        #         elif rank[rooty] > rank[rootx]:
+        #             parent[rootx] = rooty
+        #         else:
+        #             parent[rootx] = rooty
+        #             rank[rooty] += 1
+        #         count -= 1
+        
+        # for row in range(rows):
+        #     for col in range(cols):
+        #         if grid[row][col] == "1":
+        #             for dx, dy in dirs:
+        #                 if 0 <= row + dx < rows and 0 <= col + dy < cols and grid[row + dx][col + dy] == "1":
+        #                     union(cols*row + col, cols*(row + dx) + (col + dy))
+        
+        # return count
+
+
+####################################################################################################################
+
+
         rows = len(grid)
         cols = len(grid[0])
-        parent = []
-        rank = []
-        count = 0
-        dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+        dirs = [[0, 1], [0, -1], [-1, 0], [1, 0]]
+        def dfs(r, c):
+            if grid[r][c] == "1":
+                grid[r][c] = "0"
+                for dr, dc in dirs:
+                    new_r = dr + r
+                    new_c = dc + c
+                    if 0 <= new_r < rows and 0 <= new_c < cols:
+                        dfs(new_r, new_c)
+        num_islands = 0
         for i in range(rows):
             for j in range(cols):
                 if grid[i][j] == "1":
-                    parent.append(i*cols + j)
-                    count += 1
-                else:
-                    parent.append(0)
-                rank.append(0)
-        
-        def find(x):
-            if parent[x] == x:
-                return x
-            parent[x] = find(parent[x])
-            return parent[x]
+                    num_islands +=1
+                    dfs(i, j)
+        return num_islands
 
-        def union(x, y):
-            nonlocal count
-            rootx = find(x)
-            rooty = find(y)
-            if rootx != rooty:
-                if rank[rootx] > rank[rooty]:
-                    parent[rooty] = rootx
-                elif rank[rooty] > rank[rootx]:
-                    parent[rootx] = rooty
-                else:
-                    parent[rootx] = rooty
-                    rank[rooty] += 1
-                count -= 1
-        
-        for row in range(rows):
-            for col in range(cols):
-                if grid[row][col] == "1":
-                    for dx, dy in dirs:
-                        if 0 <= row + dx < rows and 0 <= col + dy < cols and grid[row + dx][col + dy] == "1":
-                            union(cols*row + col, cols*(row + dx) + (col + dy))
-        
-        return count
-
-                
-
-
-            
 
         
