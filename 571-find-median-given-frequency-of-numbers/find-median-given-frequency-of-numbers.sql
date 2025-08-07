@@ -1,16 +1,32 @@
 # Write your MySQL query statement below
-with cte as (
+-- with cte as (
+--     select
+--         *,
+--         sum(frequency) over(order by num) as total_freq,
+--         (sum(frequency) over())/2.0 as median_index
+--     from
+--         Numbers
+-- )
+
+-- select
+--     round(avg(num),1) as median
+-- from
+--     cte
+-- where
+--     median_index between (total_freq - frequency) and total_freq
+
+with base as (
     select
         *,
-        sum(frequency) over(order by num) as total_freq,
-        (sum(frequency) over())/2.0 as median_index
+        sum(frequency) over(order by num) as total_frequency,
+        (sum(frequency) over())/2.0 as median
     from
-        Numbers
+        Numbers    
 )
 
 select
     round(avg(num),1) as median
 from
-    cte
+    base
 where
-    median_index between (total_freq - frequency) and total_freq
+    median between (total_frequency - frequency) and total_frequency
