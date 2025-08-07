@@ -1,8 +1,8 @@
 -- with ranking as (
 --     select
 --         name,
---         departmentId,
 --         salary,
+--         departmentId,
 --         dense_rank() over(partition by departmentId order by salary desc) as rnk
 --     from
 --         Employee
@@ -19,7 +19,7 @@
 -- on
 --     r.departmentId = d.id
 -- where
---     rnk <= 3 
+--     r.rnk <= 3
 
 with ranking as (
     select
@@ -37,7 +37,7 @@ select
     r.salary as Salary
 from
     ranking r
-join
+left join
     Department d
 on
     r.departmentId = d.id
