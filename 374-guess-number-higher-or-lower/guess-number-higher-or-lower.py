@@ -11,12 +11,11 @@ class Solution:
         right = n
         while left <= right:
             mid = (left + right) // 2
-            if guess(mid) == 0:
-                return mid
-
             if guess(mid) == -1:
                 right = mid - 1
-            
-            if guess(mid) == 1:
+            elif guess(mid) == 1:
                 left = mid + 1
+            else:
+                return mid
+        
 
